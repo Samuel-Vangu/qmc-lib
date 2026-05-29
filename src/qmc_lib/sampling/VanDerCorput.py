@@ -1,6 +1,5 @@
 from qmc_lib.core.sampler_core import BaseSampler
 import numpy as np
-import time
 from numba import njit
 
 @njit

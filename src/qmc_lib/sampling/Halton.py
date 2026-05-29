@@ -61,8 +61,7 @@ class Halton(BaseSampler):
             return result.T
         
 
-sampler = Halton(2,10000,seed = 5)
-tab = sampler.generate(backend = "numpy",scramble= False )
+
 
 
 
