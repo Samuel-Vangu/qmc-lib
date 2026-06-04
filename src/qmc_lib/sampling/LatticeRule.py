@@ -1,5 +1,7 @@
+from __future__ import annotations 
 import numpy as np
 from qmc_lib.core.sampler_core import BaseSampler
+import numpy.typing as npt
 
 def load_lattice_vector(d, filename="lattice-33002-1024-1048576.9125"):
     """
@@ -40,22 +42,59 @@ def load_lattice_vector(d, filename="lattice-33002-1024-1048576.9125"):
     return z
 
 class LatticeSampler(BaseSampler):
+    """
+    Lattice rule sampler for quasi-Monte Carlo integration.
+    
+    Generates samples using a lattice rule (also known as rank-1 lattice rule),
+    which are highly efficient low-discrepancy sequences, especially in low to 
+    moderate dimensions.
+    
+    This implementation relies on precomputed lattice vectors (good lattice points)
+    for dimensions up to 9125.
+    
+    Parameters
+    ----------
+    dimension : int
+        Number of dimensions (must be between 1 and 9125).
+    n_samples : int
+        Number of samples to generate.
+    seed : int, default=0
+        Random seed used for the shifting procedure.
+    """
 
-    def __init__(self,dimension,n_samples,seed=0):
+    def __init__(self,dimension : int,n_samples : int ,seed : int =0):
         if not( 1 <= dimension <= 9125):
             raise ValueError("dimension must be an integer between 1 and 9125")
         super().__init__(dimension,n_samples,seed)
     
-    def generate(self,shift = True):
+    def generate(self,shifting : bool = True) -> npt.NDArray :
+        """
+        Generate lattice rule samples in the unit hypercube [0, 1)^dimension.
+        
+        Parameters
+        ----------
+        shifting : bool, default=True
+            If True, applies a random shift modulo 1 to improve uniformity
+            (recommended for most use cases).
+        
+        Returns
+        -------
+        npt.NDArray
+            Array of shape (n_samples, dimension) containing the lattice
+            samples in [0, 1)^dimension.
+        """
         z = load_lattice_vector(d=self.dim)
         index = np.tile(np.arange(0 ,self.n_samples ),(self.dim,1)).T
         result = np.mod((index * z)/self.n_samples,1)
-        if shift :
+        if shifting :
             rng = np.random.default_rng(self.seed)
             self.shift = rng.uniform(0,1,size = self.dim)
             result = np.mod(result + self.shift, 1)
         return result
     
+
+
+
     
 
 

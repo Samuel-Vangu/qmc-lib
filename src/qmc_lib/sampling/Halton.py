@@ -1,8 +1,9 @@
+from __future__ import annotations  
 from qmc_lib.core.sampler_core import BaseSampler
 import numpy as np
 from sympy import sieve
 from numba import njit
-
+import numpy.typing as npt
 
 @njit
 def generate_halton(primes,tab):
@@ -15,11 +16,45 @@ def generate_halton(primes,tab):
         return result.T
 
 class HaltonSampler(BaseSampler):
-    def __init__(self,dimension, n_samples,seed = 0):
+    """
+    Halton sequence sampler for quasi-Monte Carlo methods.
+    
+    Generates low-discrepancy sequences using the Halton algorithm,
+    with optional scrambling (Owen scrambling variant).
+    
+    Parameters
+    ----------
+    dimension : int
+        Number of dimensions of the sample space.
+    n_samples : int
+        Number of samples to generate.
+    seed : int, default=0
+        Random seed for reproducibility (used only when scrambling is enabled).
+    """
+    def __init__(self,dimension : int, n_samples : int, seed :int = 0):
         super().__init__(dimension,n_samples,seed)
         self.result = None
     
-    def generate(self,backend = "numpy",scramble = False,first = 0):
+    def generate(self,backend : str = "numpy",scramble : bool = False,first : int = 0) -> npt.NDArray : 
+        """
+        Generate Halton samples.
+        
+        Parameters
+        ----------
+        backend : {'numpy', 'numba'}, default='numpy'
+            Backend to use for computation. 'numba' can be significantly faster
+            for large sample counts.
+        scramble : bool, default=False
+            Whether to apply Owen scrambling to improve uniformity.
+        first : int, default=0
+            Index of the first sample to generate (useful for incremental generation).
+        
+        Returns
+        -------
+        npt.NDArray
+            Array of shape (n_samples, dimension) containing the Halton samples
+            in the unit hypercube [0, 1)^dimension.
+        """
         self.rng =  np.random.default_rng(self.seed)
         sieve.extend_to_no(self.dim )
         primes_list = np.array(sieve._list)[0:self.dim ]
@@ -63,7 +98,28 @@ class HaltonSampler(BaseSampler):
                 facteur /= primes
             self.result = result.T
             return result.T
-    def forward(self, n, backend="numpy", scramble=False):
+    def forward(self, n : int , backend : str ="numpy", scramble : bool =False) -> npt.NDArray : 
+        """
+        Generate `n` samples and append them to previously generated samples.
+        
+        This method allows incremental generation of Halton sequences while
+        maintaining continuity.
+        
+        Parameters
+        ----------
+        n : int
+            Number of new samples to generate.
+        backend : {'numpy', 'numba'}, default='numpy'
+            Computation backend.
+        scramble : bool, default=False
+            Whether to use scrambled Halton sequences.
+        
+        Returns
+        -------
+        npt.NDArray
+            Array of shape (total_samples, dimension) containing all generated
+            samples so far.
+        """
         self.n_samples = n
         if self.result is None:
             return self.generate(backend=backend, scramble=scramble, first=0)
@@ -75,11 +131,18 @@ class HaltonSampler(BaseSampler):
         return self.result
     
     def reset(self) :
+        """
+        Reset the sampler, clearing all previously generated samples.
+        
+        After calling reset, the next call to `generate()` or `forward()`
+        will start from the beginning of the sequence.
+        """
         self.result = None
+
+
         
 
-            
-
+        
 
 
 
