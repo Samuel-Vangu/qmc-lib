@@ -1,6 +1,5 @@
 from qmc_lib.core.sampler_core import BaseSampler
 import numpy as np
-import matplotlib.pyplot as plt
 
 class RandomSampler(BaseSampler):
 
