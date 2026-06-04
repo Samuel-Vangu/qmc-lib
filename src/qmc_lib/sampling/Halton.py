@@ -14,16 +14,17 @@ def generate_halton(primes,tab):
             facteur /= primes
         return result.T
 
-class Halton(BaseSampler):
+class HaltonSampler(BaseSampler):
     def __init__(self,dimension, n_samples,seed = 0):
         super().__init__(dimension,n_samples,seed)
+        self.result = None
     
-    def generate(self,backend = "numpy",scramble = False):
+    def generate(self,backend = "numpy",scramble = False,first = 0):
         self.rng =  np.random.default_rng(self.seed)
-        sieve.extend_to_no(self.dim)
-        primes_list = np.array(sieve._list)[0:self.dim]
+        sieve.extend_to_no(self.dim )
+        primes_list = np.array(sieve._list)[0:self.dim ]
         primes = np.tile((primes_list),(self.n_samples,1)).T
-        tab = np.tile(np.arange(0,self.n_samples),(self.dim,1))
+        tab = np.tile(np.arange(first,self.n_samples + first),(self.dim,1))
         if scramble :
             facteur = 1/primes
             m = 0
@@ -48,20 +49,36 @@ class Halton(BaseSampler):
             fact= bases ** (-k)             # shape (dim, m)
             fact = fact[:, None, :]      # shape (dim, 1, m)
             result = np.sum(scrambled * fact, axis=2)
+            self.result = result.T
             return result.T
         else :
             if backend == "numba":
-                return generate_halton(primes,tab)
+                self.result = generate_halton(primes,tab)
+                return self.result
             result = np.zeros_like(tab,dtype=np.float64)
             facteur = 1/primes
             while np.any(tab != 0):
                 result += (tab % primes) * facteur
                 tab //= primes
                 facteur /= primes
+            self.result = result.T
             return result.T
+    def forward(self, n, backend="numpy", scramble=False):
+        self.n_samples = n
+        if self.result is None:
+            return self.generate(backend=backend, scramble=scramble, first=0)
+        old_result = self.result.copy()
+        start = old_result.shape[0]
+        self.n_samples = n
+        new_points = self.generate(backend, scramble, first=start)
+        self.result = np.concatenate((old_result, new_points), axis=0)
+        return self.result
+    
+    def reset(self) :
+        self.result = None
         
 
-
+            
 
 
 
