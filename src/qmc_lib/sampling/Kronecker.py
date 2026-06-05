@@ -4,7 +4,6 @@ from sympy import sieve
 import numpy as np
 import numpy.typing as npt
 
-
 class KroneckerSampler(BaseSampler):
     """
     Kronecker sequence sampler for quasi-Monte Carlo methods.

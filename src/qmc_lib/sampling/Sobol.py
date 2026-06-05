@@ -2,9 +2,12 @@ from __future__ import annotations
 from qmc_lib.core.sampler_core import BaseSampler
 import numpy as np
 import numpy.typing as npt
+from pathlib import Path
 
-def load_direction_numbers(path):
+DATA_DIR = Path(__file__).resolve().parent
 
+def load_direction_numbers(filename="new-joe-kuo-6.21201"):
+    path = DATA_DIR / filename
     data = {}
 
     with open(path, "r") as f:
@@ -30,7 +33,7 @@ def load_direction_numbers(path):
 
     return data
 
-Sobol_data = load_direction_numbers("new-joe-kuo-6.21201")
+Sobol_data = load_direction_numbers()
 
 
 

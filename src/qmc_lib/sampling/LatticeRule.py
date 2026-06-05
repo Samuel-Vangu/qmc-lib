@@ -2,6 +2,9 @@ from __future__ import annotations
 import numpy as np
 from qmc_lib.core.sampler_core import BaseSampler
 import numpy.typing as npt
+from pathlib import Path
+
+DATA_DIR = Path(__file__).resolve().parent
 
 def load_lattice_vector(d, filename="lattice-33002-1024-1048576.9125"):
     """
@@ -23,11 +26,11 @@ def load_lattice_vector(d, filename="lattice-33002-1024-1048576.9125"):
     z : np.ndarray
         Tableau numpy [z1, z2, ..., zd] de dtype uint64.
     """
-
+    path = DATA_DIR / filename
     if d <= 0:
         raise ValueError("La dimension d doit être strictement positive.")
 
-    data = np.loadtxt(filename, dtype=np.uint64)
+    data = np.loadtxt(path, dtype=np.uint64)
 
     if data.ndim != 2 or data.shape[1] < 2:
         raise ValueError("Le fichier doit contenir au moins deux colonnes : dimension et z_j.")
