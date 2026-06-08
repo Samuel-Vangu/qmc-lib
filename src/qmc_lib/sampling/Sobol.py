@@ -95,13 +95,13 @@ class SobolSampler(BaseSampler):
         self.result = None
         self.shift = None
     
-    def generate(self,shifting : bool = False,first:int = 0) -> npt.NDArray:
+    def generate(self,shifting : bool = True,first:int = 0) -> npt.NDArray:
         """
         Generate Sobol sequence samples in the unit hypercube [0, 1)^dimension.
         
         Parameters
         ----------
-        shifting : bool, default=False
+        shifting : bool, default=True
             If True, applies a random digital shift (modulo 1) to improve 
             uniformity. The shift is generated once and reused for consistency.
         first : int, default=0
@@ -124,7 +124,7 @@ class SobolSampler(BaseSampler):
             result = np.mod(result + self.shift, 1)
         self.result = result
         return result
-    def forward(self,n : int,shifting : bool = False) -> npt.NDArray:
+    def forward(self,n : int,shifting : bool = True) -> npt.NDArray:
         """
         Generate `n` new samples and append them to the previously generated ones.
         
@@ -135,7 +135,7 @@ class SobolSampler(BaseSampler):
         ----------
         n : int
             Number of new samples to generate and append.
-        shifting : bool, default=False
+        shifting : bool, default=True
             Whether to apply (and reuse) a random shift.
         
         Returns
