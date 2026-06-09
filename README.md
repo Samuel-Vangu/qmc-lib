@@ -1,6 +1,5 @@
-````markdown
 <div align="center">
-  <img src="assets/qmc_lib_logo.png" alt="QMC Lib Logo" width="180"/>
+  <img src="https://github.com/Samuel-Vangu/qmc-lib" alt="QMC Lib Logo" width="180"/>
 
 # QMC Lib
 
@@ -239,7 +238,6 @@ This project is currently intended for educational and research purposes.
 
 **Samuel Vangu**
 Université Grenoble Alpes
+
 Laboratoire Jean Kuntzmann
 
-```
-```
