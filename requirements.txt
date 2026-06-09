@@ -41,7 +41,9 @@ pyperf==2.10.0
 pytest==9.0.3
 python-dateutil==2.9.0.post0
 pyzmq==27.1.0
--e git+https://github.com/Samuel-Vangu/qmc-lib@56513446de55cf8ce69a3613f72ed0af132a8590#egg=qmc_lib
+-e git+https://github.com/Samuel-Vangu/qmc-lib@aad2ec775a1af9574aa309d4e95ce6930c640976#egg=qmc_lib
+qmcpy==2.3
+qmctoolscl==1.2.3
 scipy==1.17.1
 six==1.17.0
 stack-data==0.6.3
