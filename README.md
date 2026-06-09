@@ -284,10 +284,8 @@ One of the main examples of the library is the estimation of the expected loss o
 
 The goal is to approximate a quantity of the form
 
-$$
-R(\theta)
-=========
 
+$$
 \mathbb{E}
 \left[
 \left(
@@ -300,9 +298,8 @@ After transforming Gaussian random variables into uniform variables on the unit 
 
 The corresponding notebook can be found in:
 
-```text
-examples/qmc_expected_loss_example.ipynb
-```
+
+[examples/notebooks/qmc_expected_loss_example.ipynb]
 
 ---
 
