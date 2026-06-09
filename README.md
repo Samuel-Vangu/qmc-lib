@@ -305,52 +305,51 @@ The corresponding notebook can be found in:
 
 ## Benchmark
 
-A benchmark was performed to compare the methods implemented in `qmc_lib` and to compare some of them with equivalent methods from [**QMCPy**](https://qmcpy.org/), an existing Python library for Monte Carlo and Quasi-Monte Carlo integration.
+A benchmark was performed to compare `qmc_lib` with [**QMCPy**](https://qmcpy.org/), an existing Python library for Monte Carlo and Quasi-Monte Carlo integration.
 
-The benchmark studies two main aspects:
+The comparison focuses on two aspects:
 
 1. **Accuracy**
-   The absolute error is compared against an exact reference value.
+   We compare the absolute error of the estimators against an exact reference value.
 
-2. **Computational time**
-   The generation time of point sets is measured using `pyperf`.
+2. **Point generation time**
+   We benchmark only the time required to generate the point sets. The evaluation time of the integrand is not the main focus here, since both libraries use the same function evaluation step. The timing benchmark is performed with `pyperf`.
 
-The common methods compared with QMCPy include:
+The methods compared with QMCPy are the ones available in both libraries:
 
 * Uniform sampling
 * Sobol sequence
 * Halton sequence
 * Lattice rules
 
-The goal of this benchmark is not to claim that `qmc_lib` is faster or more accurate than a mature library such as QMCPy. Instead, the objective is to check that the implementations behave coherently and to identify possible directions for improvement.
-
 <p align="center">
-  <img src="assets/benchmark_accuracy.png" alt="Accuracy benchmark" width="750"/>
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/benchmarks/qmc_liv%20vs%20qmcpy%20on%20precision.png" alt="Accuracy benchmark" width="850"/>
 </p>
 
 <p align="center">
-  <em>Accuracy comparison between the methods implemented in the library.</em>
+  <em>Accuracy comparison between qmc_lib and QMCPy.</em>
 </p>
 
 <p align="center">
-  <img src="assets/benchmark_time_vs_samples.png" alt="Timing benchmark versus number of samples" width="750"/>
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/benchmarks/time%20vs%20n_samples.png" alt="Timing benchmark versus number of samples" width="850"/>
 </p>
 
 <p align="center">
-  <em>Mean generation time as a function of the number of samples.</em>
+  <em>Mean point generation time as a function of the number of samples.</em>
 </p>
 
 <p align="center">
-  <img src="assets/benchmark_time_vs_dimension.png" alt="Timing benchmark versus dimension" width="750"/>
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/benchmarks/time%20vs%20dimension.png" alt="Timing benchmark versus dimension" width="850"/>
 </p>
 
 <p align="center">
-  <em>Mean generation time as a function of the dimension.</em>
+  <em>Mean point generation time as a function of the dimension.</em>
 </p>
 
-The results show that `qmc_lib` produces coherent numerical approximations and that its estimators converge toward the expected values. QMCPy often achieves better accuracy for some QMC methods, which is expected since it is a mature and optimized library. However, `qmc_lib` remains useful as a clear and pedagogical implementation of the main ideas behind Monte Carlo and Quasi-Monte Carlo integration.
+The benchmark shows that `qmc_lib` gives coherent numerical approximations and that its estimators converge toward the reference value. QMCPy often achieves better accuracy for some QMC methods, which is expected from a mature and optimized library.
 
----
+On the other hand, `qmc_lib` is faster for basic point generation in this benchmark. This reflects its simpler and more direct implementation style. Overall, the benchmark highlights a clear trade-off: QMCPy provides more advanced QMC tools, while `qmc_lib` remains lightweight, readable, and useful for educational and experimental purposes.
+
 
 ## Project Context
 
@@ -372,7 +371,7 @@ qmc_lib/
 
 examples/
     notebooks/         # Example notebooks
-    benchmarks/        # Benchmark scripts and results
+benchmarks/        # Benchmark scripts and results
 ```
 
 ---
