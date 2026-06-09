@@ -305,7 +305,7 @@ The corresponding notebook can be found in:
 
 ## Benchmark
 
-A benchmark was performed to compare the methods implemented in `qmc_lib` and to compare some of them with equivalent methods from **QMCPy**, an existing Python library for Monte Carlo and Quasi-Monte Carlo integration.
+A benchmark was performed to compare the methods implemented in `qmc_lib` and to compare some of them with equivalent methods from [**QMCPy**](https://qmcpy.org/), an existing Python library for Monte Carlo and Quasi-Monte Carlo integration.
 
 The benchmark studies two main aspects:
 
