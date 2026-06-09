@@ -1,7 +1,14 @@
 <div align="center">
-  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/QMC_lib%20logo.png" alt="QMC Lib Logo" width="180"/>
+  <br>
+  <img src="https://raw.githubusercontent.com/Samuel-Vangu/qmc-lib/main/QMC_lib%20logo.png" alt="QMC Lib Logo" width="260"/>
+  <br><br>
 
-# QMC Lib
+  <h1>QMC Lib</h1>
+
+  <p>
+    <strong>A Python library for Monte Carlo and Quasi-Monte Carlo numerical integration.</strong>
+  </p>
+</div>
 
 **A Python library for Monte Carlo and Quasi-Monte Carlo numerical integration.**
 
