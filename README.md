@@ -299,7 +299,7 @@ After transforming Gaussian random variables into uniform variables on the unit 
 The corresponding notebook can be found in:
 
 
-[examples/notebooks/qmc_expected_loss_example.ipynb]
+[examples/notebooks/qmc_expected_loss_example.ipynb](https://github.com/Samuel-Vangu/qmc-lib/blob/main/examples/notebooks/qmc_expected_loss_example.ipynb.ipynb)
 
 ---
 
