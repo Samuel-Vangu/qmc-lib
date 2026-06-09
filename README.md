@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://github.com/Samuel-Vangu/qmc-lib" alt="QMC Lib Logo" width="180"/>
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/QMC_lib%20logo.png" alt="QMC Lib Logo" width="180"/>
 
 # QMC Lib
 
