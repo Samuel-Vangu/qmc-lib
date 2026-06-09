@@ -386,6 +386,8 @@ This project is currently intended for educational and research purposes.
 ## Author
 
 **Samuel Vangu**
+
 Université Grenoble Alpes
+
 DAO team, LJK lab — Data, Learning and Optimization
 
