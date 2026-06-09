@@ -46,46 +46,11 @@ It also includes tools for:
 
 ## Installation
 
-Clone the repository:
+You can install `qmc_lib` directly from GitHub:
 
 ```bash
-git clone https://github.com/Samuel-Vangu/qmc-lib.git
-cd qmc-lib
+pip install git+https://github.com/Samuel-Vangu/qmc-lib
 ```
-
-Create a virtual environment:
-
-```bash
-python -m venv .venv
-```
-
-Activate the virtual environment.
-
-On Linux/macOS:
-
-```bash
-source .venv/bin/activate
-```
-
-On Windows:
-
-```bash
-.venv\Scripts\activate
-```
-
-Install the required dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
-Install the library in editable mode:
-
-```bash
-pip install -e .
-```
-
-You can now use the library in your Python scripts or notebooks.
 
 To check that the installation works:
 
@@ -98,13 +63,30 @@ samples = sampler.generate()
 print(samples.shape)
 ```
 
-For benchmark notebooks and development tools, you may also need optional dependencies such as `QMCPy` and `pyperf`. If a development requirements file is provided, you can install them with:
+Expected output:
 
-```bash
-pip install -r requirements-dev.txt
+```text
+(1024, 2)
 ```
 
----
+For development, clone the repository and install it in editable mode:
+
+```bash
+git clone https://github.com/Samuel-Vangu/qmc-lib
+cd qmc-lib
+python -m venv .venv
+source .venv/bin/activate   # Linux/macOS
+# .venv\Scripts\activate    # Windows
+pip install -r requirements.txt
+pip install -e .
+```
+
+Optional benchmark and development tools can be installed with:
+
+```bash
+pip install ".[dev,benchmark]"
+```
+
 
 ## Quick Start
 
