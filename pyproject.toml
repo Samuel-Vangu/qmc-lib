@@ -1,18 +1,66 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "qmc-lib"
 version = "0.1.0"
-description = "Monte Carlo and Quasi-Monte Carlo library for numerical integration"
+description = "A Python library for Monte Carlo and Quasi-Monte Carlo numerical integration."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+
 authors = [
-    {name = "Samuel Vangu"}
+    { name = "Samuel Vangu" }
 ]
+
+keywords = [
+    "monte-carlo",
+    "quasi-monte-carlo",
+    "numerical-integration",
+    "low-discrepancy-sequences",
+    "qmc"
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Mathematics"
+]
+
 dependencies = [
     "numpy",
+    "scipy",
     "matplotlib"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pandas",
+    "jupyterlab",
+    "ipykernel",
+    "pytest"
+]
+
+benchmark = [
+    "qmcpy",
+    "pyperf",
+    "pandas"
+]
+
+[project.urls]
+Homepage = "https://github.com/Samuel-Vangu/qmc-lib"
+Repository = "https://github.com/Samuel-Vangu/qmc-lib"
+Issues = "https://github.com/Samuel-Vangu/qmc-lib/issues"
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"qmc_lib.sampling" = ["new-joe-kuo-6.21201"]
