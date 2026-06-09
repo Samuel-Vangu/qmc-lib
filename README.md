@@ -10,41 +10,37 @@
   </p>
 </div>
 
-**A Python library for Monte Carlo and Quasi-Monte Carlo numerical integration.**
-
-</div>
-
 ---
 
 ## Overview
 
-`qmc_lib` is a small Python library for experimenting with Monte Carlo and Quasi-Monte Carlo methods for numerical integration.
+`qmc_lib` is a Python library for experimenting with Monte Carlo and Quasi-Monte Carlo methods for numerical integration.
 
-The goal of the library is to provide simple, readable and explicit implementations of several sampling methods, together with tools for integration, statistics and visualization.
+The goal of the library is to provide simple, readable, and explicit implementations of several sampling methods. It is designed to make it easy to generate point sets, approximate integrals, compare sampling methods, visualize their behavior, and run basic benchmarks.
 
-The library is mainly designed for educational and experimental purposes: it makes it easy to generate point sets, approximate integrals, compare sampling methods and visualize how points fill the unit cube.
+The library is mainly intended for educational and experimental purposes. It focuses on clarity and usability, while still providing practical tools for numerical integration on the unit cube.
 
 ---
 
 ## Features
 
-The library currently provides several sampling methods:
+The library currently provides the following sampling methods:
 
-- Uniform Monte Carlo sampling
-- Latin Hypercube Sampling
-- Halton sequence
-- Sobol sequence
-- Lattice rules
-- Kronecker sequence
+* Uniform Monte Carlo sampling
+* Latin Hypercube Sampling
+* Halton sequence
+* Sobol sequence
+* Lattice rules
+* Kronecker sequence
 
 It also includes tools for:
 
-- numerical integration on the unit cube;
-- statistical estimation;
-- confidence intervals for random methods;
-- visualization of point sets;
-- comparison of approximation errors;
-- benchmarking against existing QMC libraries.
+* numerical integration on the unit cube;
+* statistical estimation;
+* confidence intervals for random methods;
+* visualization of point sets;
+* comparison of approximation errors;
+* benchmarking against existing QMC libraries.
 
 ---
 
@@ -55,31 +51,71 @@ Clone the repository:
 ```bash
 git clone https://github.com/Samuel-Vangu/qmc-lib.git
 cd qmc-lib
-````
+```
 
-Install the package locally:
+Create a virtual environment:
 
 ```bash
-pip install -e .
+python -m venv .venv
+```
+
+Activate the virtual environment.
+
+On Linux/macOS:
+
+```bash
+source .venv/bin/activate
+```
+
+On Windows:
+
+```bash
+.venv\Scripts\activate
 ```
 
 Install the required dependencies:
 
 ```bash
-pip install numpy scipy matplotlib pandas
+pip install -r requirements.txt
 ```
 
-For the benchmark notebooks, you may also need:
+Install the library in editable mode:
 
 ```bash
-pip install qmcpy pyperf
+pip install -e .
+```
+
+You can now use the library in your Python scripts or notebooks.
+
+To check that the installation works:
+
+```python
+from qmc_lib.sampling.Sobol import SobolSampler
+
+sampler = SobolSampler(dimension=2, n_samples=1024, seed=0)
+samples = sampler.generate()
+
+print(samples.shape)
+```
+
+For benchmark notebooks and development tools, you may also need optional dependencies such as `QMCPy` and `pyperf`. If a development requirements file is provided, you can install them with:
+
+```bash
+pip install -r requirements-dev.txt
 ```
 
 ---
 
 ## Quick Start
 
-The following example approximates an integral over the unit cube using a Sobol point set.
+The library follows a simple workflow:
+
+1. choose a sampling method;
+2. generate points in the unit cube;
+3. pass the points to the integrator;
+4. compute the approximation.
+
+The following example approximates an integral over $[0,1]^d$ using a Sobol point set.
 
 ```python
 import numpy as np
@@ -113,53 +149,106 @@ print(f"Estimate: {estimate}")
 
 For this function,
 
-[
+$$
 f(x)=\prod_{i=1}^d \frac{1}{1+x_i},
-]
+$$
 
 the exact value of the integral is
 
-[
+$$
 \int_{[0,1]^d} f(x),dx = (\log 2)^d.
-]
+$$
 
-This makes it useful for testing and benchmarking numerical integration methods.
+Therefore, the exact value can be computed with:
+
+```python
+exact_value = np.log(2.0) ** dimension
+absolute_error = abs(estimate - exact_value)
+
+print(f"Exact value: {exact_value}")
+print(f"Absolute error: {absolute_error}")
+```
 
 ---
 
-## Example: Expected Loss Estimation
+## Using Other Sampling Methods
 
-One of the main examples of the library is the estimation of the expected loss of a regression model.
+All sampling methods in the library follow the same general interface:
 
-The goal is to approximate a quantity of the form
+```python
+sampler = SamplerClass(
+    dimension=dimension,
+    n_samples=n_samples,
+    seed=seed,
+)
 
-[
-R(\theta)
-=========
-
-\mathbb{E}
-\left[
-\left(
-y_{\mathrm{model}}(X)-Y
-\right)^2
-\right].
-]
-
-After transforming Gaussian random variables into uniform variables on the unit cube, the problem becomes an integral over ([0,1]^4). This allows all sampling methods implemented in the library to be applied in the same framework.
-
-The corresponding notebook can be found in:
-
-```text
-examples/qmc_expected_loss_example.ipynb
+samples = sampler.generate()
 ```
+
+This means that once you know how to use one sampler, you can use the others in almost the same way.
+
+For example, you can replace `SobolSampler` with another sampler:
+
+```python
+from qmc_lib.sampling.Halton import HaltonSampler
+from qmc_lib.sampling.LatinHypercube import LatinHypercubeSampler
+from qmc_lib.sampling.LatticeRule import LatticeSampler
+from qmc_lib.sampling.Kronecker import KroneckerSampler
+from qmc_lib.sampling.UniformSampler import UniformSampler
+```
+
+Example with Halton:
+
+```python
+samples = HaltonSampler(
+    dimension=dimension,
+    n_samples=n_samples,
+    seed=seed,
+).generate()
+
+estimate = Integrator(
+    f=f,
+    samples=samples,
+).compute()
+```
+
+Example with Uniform Monte Carlo:
+
+```python
+samples = UniformSampler(
+    dimension=dimension,
+    n_samples=n_samples,
+    seed=seed,
+).generate()
+
+estimate = Integrator(
+    f=f,
+    samples=samples,
+).compute()
+```
+
+Example with Latin Hypercube Sampling:
+
+```python
+samples = LatinHypercubeSampler(
+    dimension=dimension,
+    n_samples=n_samples,
+    seed=seed,
+).generate()
+
+estimate = Integrator(
+    f=f,
+    samples=samples,
+).compute()
+```
+
+This common structure makes it easy to compare different methods on the same integration problem.
 
 ---
 
 ## Visualization
 
-The library provides simple visualization tools to compare how different sampling methods fill the unit square.
-
-Example:
+The library also provides visualization tools to compare how different sampling methods fill the unit square.
 
 ```python
 from qmc_lib.visualization import Visualization
@@ -173,7 +262,47 @@ Visualization.compare_point_sets_2d(
 )
 ```
 
-These visualizations help illustrate the difference between purely random sampling and more structured low-discrepancy point sets.
+These visualizations help illustrate the difference between purely random point sets and more structured low-discrepancy point sets.
+
+<p align="center">
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/qmc%20sequences%201.png" alt="Point set visualization" width="750"/>
+</p>
+
+<p align="center">
+  <img src="https://github.com/Samuel-Vangu/qmc-lib/blob/main/qmc%20sequences%202.png" alt="Point set visualization" width="750"/>
+</p>
+
+<p align="center">
+  <em>Example visualization of different sampling methods in two dimensions.</em>
+</p>
+
+---
+
+## Example: Expected Loss Estimation
+
+One of the main examples of the library is the estimation of the expected loss of a regression model.
+
+The goal is to approximate a quantity of the form
+
+$$
+R(\theta)
+=========
+
+\mathbb{E}
+\left[
+\left(
+y_{\mathrm{model}}(X)-Y
+\right)^2
+\right].
+$$
+
+After transforming Gaussian random variables into uniform variables on the unit cube, the problem becomes an integral over $[0,1]^4$. This allows all sampling methods implemented in the library to be applied in the same framework.
+
+The corresponding notebook can be found in:
+
+```text
+examples/qmc_expected_loss_example.ipynb
+```
 
 ---
 
@@ -196,25 +325,41 @@ The common methods compared with QMCPy include:
 * Halton sequence
 * Lattice rules
 
-Example benchmark figures:
+The goal of this benchmark is not to claim that `qmc_lib` is faster or more accurate than a mature library such as QMCPy. Instead, the objective is to check that the implementations behave coherently and to identify possible directions for improvement.
 
-```markdown
-![Accuracy comparison](assets/benchmark_accuracy.png)
+<p align="center">
+  <img src="assets/benchmark_accuracy.png" alt="Accuracy benchmark" width="750"/>
+</p>
 
-![Timing vs number of samples](assets/benchmark_time_vs_samples.png)
+<p align="center">
+  <em>Accuracy comparison between the methods implemented in the library.</em>
+</p>
 
-![Timing vs dimension](assets/benchmark_time_vs_dimension.png)
-```
+<p align="center">
+  <img src="assets/benchmark_time_vs_samples.png" alt="Timing benchmark versus number of samples" width="750"/>
+</p>
 
-The benchmark shows that `qmc_lib` produces coherent numerical results and that its methods converge toward the expected values. QMCPy often achieves better accuracy for some QMC methods, which is expected since it is a mature and optimized library. However, `qmc_lib` remains useful as a clear and pedagogical implementation of the main ideas behind MC and QMC integration.
+<p align="center">
+  <em>Mean generation time as a function of the number of samples.</em>
+</p>
+
+<p align="center">
+  <img src="assets/benchmark_time_vs_dimension.png" alt="Timing benchmark versus dimension" width="750"/>
+</p>
+
+<p align="center">
+  <em>Mean generation time as a function of the dimension.</em>
+</p>
+
+The results show that `qmc_lib` produces coherent numerical approximations and that its estimators converge toward the expected values. QMCPy often achieves better accuracy for some QMC methods, which is expected since it is a mature and optimized library. However, `qmc_lib` remains useful as a clear and pedagogical implementation of the main ideas behind Monte Carlo and Quasi-Monte Carlo integration.
 
 ---
 
 ## Project Context
 
-This library was developed as part of my **Stage d'Excellence** at **Université Grenoble Alpes**, in the **Laboratoire Jean Kuntzmann (LJK)**.
+This library was developed as part of my [**Stage d'Excellence**](https://leo.univ-grenoble-alpes.fr/menu-principal/mon-projet-d-etudes-et-professionnel/faire-un-stage/les-stages-specifiques/les-stages-d-excellence-2026-153646.kjsp?RH=8631794101180600&ksession=7b607bcf-d0cc-4c95-bba7-b0a703dab8bd) at **Université Grenoble Alpes**.
 
-The project was carried out under the supervision of **Quoc-Tung Le**.
+The project was carried out in the [**DAO team**](https://dao-ljk.imag.fr/) of the [**LJK lab**](https://www-ljk.imag.fr/) — *Data, Learning and Optimization* — under the supervision of [**Quoc-Tung Le**](https://tung-qle.github.io/).
 
 The main objective of the internship was to study Monte Carlo and Quasi-Monte Carlo methods for numerical integration, both from a theoretical and computational point of view.
 
@@ -245,6 +390,5 @@ This project is currently intended for educational and research purposes.
 
 **Samuel Vangu**
 Université Grenoble Alpes
-
-Laboratoire Jean Kuntzmann
+DAO team, LJK lab — Data, Learning and Optimization
 
