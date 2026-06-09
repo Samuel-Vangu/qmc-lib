@@ -29,13 +29,13 @@ class KroneckerSampler(BaseSampler):
         super().__init__(dimension,n_samples,seed)
         self.result = None
         self.shift = None
-    def generate(self,shifting : bool = True,first : int = 0) -> npt.NDArray :
+    def generate(self,shifting : bool = False,first : int = 0) -> npt.NDArray :
         """
         Generate Kronecker sequence samples.
         
         Parameters
         ----------
-        shifting : bool, default=True
+        shifting : bool, default=False
             If True, applies a random shift (modulo 1) to all dimensions.
             The shift is generated once and reused for subsequent calls.
         first : int, default=0
@@ -58,7 +58,7 @@ class KroneckerSampler(BaseSampler):
             result = np.mod(result+ self.shift,1)
         self.result = result
         return result
-    def forward(self,n : int , shifting :bool = True) -> npt.NDArray:
+    def forward(self,n : int , shifting :bool = False) -> npt.NDArray:
         """
         Generate `n` new samples and append them to the existing ones.
         
@@ -68,7 +68,7 @@ class KroneckerSampler(BaseSampler):
         ----------
         n : int
             Number of new samples to generate and append.
-        shifting : bool, default=True
+        shifting : bool, default=False
             Whether to use random shifting. If True, the same shift is 
             applied consistently across all generated samples.
         

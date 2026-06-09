@@ -70,13 +70,13 @@ class LatticeSampler(BaseSampler):
             raise ValueError("dimension must be an integer between 1 and 9125")
         super().__init__(dimension,n_samples,seed)
     
-    def generate(self,shifting : bool = True) -> npt.NDArray :
+    def generate(self,shifting : bool = False) -> npt.NDArray :
         """
         Generate lattice rule samples in the unit hypercube [0, 1)^dimension.
         
         Parameters
         ----------
-        shifting : bool, default=True
+        shifting : bool, default=False
             If True, applies a random shift modulo 1 to improve uniformity
             (recommended for most use cases).
         

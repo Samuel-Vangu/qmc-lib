@@ -35,7 +35,7 @@ class HaltonSampler(BaseSampler):
         super().__init__(dimension,n_samples,seed)
         self.result = None
     
-    def generate(self,backend : str = "numpy",scramble : bool = True,first : int = 0) -> npt.NDArray : 
+    def generate(self,backend : str = "numpy",scramble : bool = False,first : int = 0) -> npt.NDArray : 
         """
         Generate Halton samples.
         
@@ -44,7 +44,7 @@ class HaltonSampler(BaseSampler):
         backend : {'numpy', 'numba'}, default='numpy'
             Backend to use for computation. 'numba' can be significantly faster
             for large sample counts.
-        scramble : bool, default=True
+        scramble : bool, default=False
             Whether to apply Owen scrambling to improve uniformity.
         first : int, default=0
             Index of the first sample to generate (useful for incremental generation).
@@ -98,7 +98,7 @@ class HaltonSampler(BaseSampler):
                 facteur /= primes
             self.result = result.T
             return result.T
-    def forward(self, n : int , backend : str ="numpy", scramble : bool =True) -> npt.NDArray : 
+    def forward(self, n : int , backend : str ="numpy", scramble : bool = False) -> npt.NDArray : 
         """
         Generate `n` samples and append them to previously generated samples.
         
@@ -111,7 +111,7 @@ class HaltonSampler(BaseSampler):
             Number of new samples to generate.
         backend : {'numpy', 'numba'}, default='numpy'
             Computation backend.
-        scramble : bool, default=True
+        scramble : bool, default=False
             Whether to use scrambled Halton sequences.
         
         Returns
